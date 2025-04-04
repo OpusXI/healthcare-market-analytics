@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.pkl
+*.h5
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints
+
+# Virtualenv
+.venv/
+venv/
+.env
+
+# VS Code / IDEs
+.vscode/
+.idea/
+
+# API keys / secrets
+*.env
+secrets.json
+config.yaml
+
+# Logs
+*.log
+
+# Data
+data/
