@@ -29,4 +29,4 @@ def get_text_to_analyze(text_file_name):
 
 
 def generate_user_prompt():
-    return get_base_prompt().replace("[SAMPLE INPUT TEXT]", get_text_to_analyze())
+    return get_base_prompt().replace("[INSERT CHUNK]", get_text_to_analyze())
