@@ -17,6 +17,24 @@ def get_raw_data_path():
     return pdf_folder_path
 
 
+def check_spacing_in_extracted_text(filename, text):
+    """A function to check if the extracted text is glued together.
+    This is a heuristic check based on the ratio of words to characters.
+    If the ratio is too low, it may indicate that the text is not properly spaced.
+    And there is a need to lower the tolerance in pdfplumber.
+    """
+    word_count = len(text.split())
+    char_count = len(text)
+
+    if char_count > 0 and word_count / char_count < 0.10:  # Low word density
+        print(
+            f"Warning: Suspicious word spacing in {filename} "
+            f"(words/char: {word_count}/{char_count})"
+        )
+
+    return text
+
+
 def extract_text_from_single_pdf(pdf_folder_path, filename):
     pdf_path = os.path.join(pdf_folder_path, filename)
     with pdfplumber.open(pdf_path) as pdf:
@@ -25,6 +43,9 @@ def extract_text_from_single_pdf(pdf_folder_path, filename):
             for page in pdf.pages
             if page.extract_text()
         )
+
+    # Check for spacing issues in the extracted text
+    text = check_spacing_in_extracted_text(filename, text)
 
     return text
 
