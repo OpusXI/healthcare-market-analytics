@@ -1,26 +1,6 @@
-import json
-import os
 from pathlib import Path
 
 import tiktoken
-from dotenv import load_dotenv
-from openai import OpenAI
-
-
-def get_API_key():
-
-    load_dotenv()
-    key = os.getenv("OPENAI_API_KEY")
-    if key is None:
-        raise ValueError(
-            "API key not found. Please set the " "OPENAI_API_KEY environment variable."
-        )
-    return key
-
-
-def initialize_openai_client():
-    client = OpenAI(api_key=get_API_key())
-    return client
 
 
 def load_txt_file(file_path):
@@ -117,65 +97,12 @@ def count_messages_tokens(messages: list, model: str = "gpt-4o-mini-2024-07-18")
     return total_tokens
 
 
-def load_llm_config():
-    """
-    Loads the LLM configuration from a JSON file.
-    Returns:
-        dict: Configuration parameters for the API call.
-    """
-    base_dir = Path(__file__).parent.resolve().parents[0]
-    config_path = base_dir / "config" / "openai_config.json"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def send_messages_to_llm(messages, config=None):
-    """
-    Sends a prompt to the LLM and returns the response.
-
-    Args:
-        messages (list): List of messages to send to the LLM.
-        config (dict): Configuration parameters for the API call.
-            - model (str): Model name (default: "gpt-4o-mini-2024-07-18").
-            - temperature (float): Sampling temperature (default: 0).
-            - max_tokens (int): Maximum tokens in the response (default: 1000).
-    Returns:
-        str: The generated response from the LLM.
-    """
-    if config is None:
-        config = load_llm_config()
-
-    try:
-
-        client = initialize_openai_client()
-        completion = client.chat.completions.create(
-            model=config.get("model", "gpt-4o-mini-2024-07-18"),
-            messages=messages,
-            temperature=config.get("temperature", 0),
-            max_completion_tokens=config.get("max_completion_tokens", 1000),
-        )
-
-        finish_reason = completion.choices[0].finish_reason
-        if finish_reason == "length":
-            print("Warning: output may have been cut off due to token limit.")
-
-        return completion.choices[0].message.content
-
-    except Exception as e:
-        return f"Error: {e}"
-
-
 def sandbox():
 
     user_prompt = generate_user_prompt()
     system_prompt = get_system_prompt()
     messages = create_messages(user_prompt, system_prompt)
-    config = load_llm_config()
-    response = send_messages_to_llm(messages, config)
-    print("LLM Response:")
-    print(response)
-
-    return
+    return messages
 
 
 if __name__ == "__main__":
