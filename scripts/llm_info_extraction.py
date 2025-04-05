@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import openai
 
 sample_text = """Gene therapy has shown incredible promise in treating rare genetic
@@ -42,20 +44,24 @@ def get_API_key():
     pass
 
 
-def get_prompt():
-    example_prompt = (
-        "I am building a custom ontology to classify access barriers to gene "
-        "therapy.\n\nBelow is some unstructured text. Please read it carefully and "
-        "extract the major access barriers.\n\nFor each barrier you identify, output a "
-        "JSON object with the following keys:\n - barrier_type: the general type of "
-        "access issue (e.g., cost, regulatory, infrastructure)\n- affected_party: "
-        "who is impacted the most by this barrier (e.g., patient, provider, payer, "
-        "policymaker)\n- description: a short summary of the issue in natural "
-        "language\n\nPlease return the result as a Python list of dictionaries. \n\n"
-        "Now analyze the following text and extract the relevant access barriers:\n"
-    )
+def load_txt_file(file_path):
+    """
+    Loads a text file and returns its content.
 
-    return example_prompt
+    Args:
+        file_path (str): Path to the text file.
+
+    Returns:
+        str: Content of the text file.
+    """
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+def get_prompt():
+    base_dir = Path(__file__).parent.resolve().parents[0]
+    prompt_path = base_dir / "prompts" / "llm_prompt_v1.txt"
+    return load_txt_file(prompt_path)
 
 
 def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
@@ -84,3 +90,12 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
         return response["choices"][0]["message"]["content"]
     except Exception as e:
         return f"Error: {e}"
+
+
+def sandbox():
+    print(get_prompt())
+    return
+
+
+if __name__ == "__main__":
+    sandbox()
