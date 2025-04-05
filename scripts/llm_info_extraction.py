@@ -102,12 +102,12 @@ def count_messages_tokens(messages: list, model: str = "gpt-4o-mini") -> int:
     return total_tokens
 
 
-def send_message_to_llm(messages, model="gpt-4o-mini", temperature=0, max_tokens=1000):
+def send_messages_to_llm(messages, model="gpt-4o-mini", temperature=0, max_tokens=1000):
     """
     Sends a prompt to the LLM and returns the response.
 
     Args:
-        prompt (str): The input text prompt to send to the LLM.
+        messages (list): List of messages to send to the LLM.
         model (str): The model to use (e.g., 'gpt-4', 'gpt-3.5-turbo').
         temperature (float): Sampling temperature.
         max_tokens (int): Max number of tokens in the response.
@@ -122,7 +122,13 @@ def send_message_to_llm(messages, model="gpt-4o-mini", temperature=0, max_tokens
             temperature=temperature,
             max_tokens=max_tokens,
         )
+
+        finish_reason = response["choices"][0]["finish_reason"]
+        if finish_reason == "length":
+            print("Warning: output may have been cut off due to token limit.")
+
         return response["choices"][0]["message"]["content"]
+
     except Exception as e:
         return f"Error: {e}"
 
