@@ -1,42 +1,4 @@
-from pathlib import Path
-
 import tiktoken
-
-
-def load_txt_file(file_path):
-    """
-    Loads a text file and returns its content.
-
-    Args:
-        file_path (str): Path to the text file.
-
-    Returns:
-        str: Content of the text file.
-    """
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def get_base_prompt():
-    base_dir = Path(__file__).parent.resolve().parents[0]
-    prompt_path = base_dir / "prompts" / "llm_prompt_v1.txt"
-    return load_txt_file(prompt_path)
-
-
-def get_text_to_analyze():
-    base_dir = Path(__file__).parent.resolve().parents[0]
-    text_path = base_dir / "sample_text" / "sample_input_text_to_analyze_by_llm_v1.txt"
-    return load_txt_file(text_path)
-
-
-def get_system_prompt():
-    base_dir = Path(__file__).parent.resolve().parents[0]
-    prompt_path = base_dir / "prompts" / "system_prompt_v1.txt"
-    return load_txt_file(prompt_path)
-
-
-def generate_user_prompt():
-    return get_base_prompt().replace("[SAMPLE INPUT TEXT]", get_text_to_analyze())
 
 
 def create_message(role: str, content: str) -> dict:
@@ -98,11 +60,7 @@ def count_messages_tokens(messages: list, model: str = "gpt-4o-mini-2024-07-18")
 
 
 def sandbox():
-
-    user_prompt = generate_user_prompt()
-    system_prompt = get_system_prompt()
-    messages = create_messages(user_prompt, system_prompt)
-    return messages
+    return
 
 
 if __name__ == "__main__":
