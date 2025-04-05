@@ -29,6 +29,10 @@ def extract_text_from_pdfs(pdf_folder_path, max_workers=4):
     all_docs = {}
     filenames = [f for f in os.listdir(pdf_folder_path) if f.endswith(".pdf")]
 
+    # SAND BOXING  REMEMBER TO DELTE #
+    filenames = filenames[2:]
+    # SAND BOXING  REMEMBER TO DELTE #
+
     # Create a ThreadPoolExecutor to handle multiple PDF files concurrently
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit tasks to the executor for each PDF file
@@ -51,21 +55,24 @@ def extract_text_from_pdfs(pdf_folder_path, max_workers=4):
     return all_docs
 
 
-def chunk_text(text, chunk_size=300):
+def chunk_text(text, chunk_size):
     return textwrap.wrap(text, chunk_size)
+
+
+def chunk_texts(all_docs, chunk_size=300):
+    chunked_docs = {}
+    for filename, text in all_docs.items():
+        # cleaned_text = clean_text(text)
+        chunked_docs[filename] = chunk_text(text, chunk_size)
+    return chunked_docs
 
 
 def sandbox():
     pdf_folder_path = get_raw_data_path()
     all_docs = extract_text_from_pdfs(pdf_folder_path)
+    chunked_docs = chunk_texts(all_docs, chunk_size=300)
 
-    return all_docs
-    """for filename, text in all_docs.items():
-        print(f"Processing {filename}...")
-        chunks = chunk_text(text)
-        print(f"Number of chunks: {len(chunks)}")
-        for i, chunk in enumerate(chunks):
-            print(f"Chunk {i+1}: {chunk}\n")"""
+    return chunked_docs
 
 
 if __name__ == "__main__":
