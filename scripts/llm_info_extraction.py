@@ -21,7 +21,7 @@ def load_txt_file(file_path):
         return f.read()
 
 
-def get_prompt():
+def get_base_prompt():
     base_dir = Path(__file__).parent.resolve().parents[0]
     prompt_path = base_dir / "prompts" / "llm_prompt_v1.txt"
     return load_txt_file(prompt_path)
@@ -31,6 +31,10 @@ def get_text_to_analyze():
     base_dir = Path(__file__).parent.resolve().parents[0]
     text_path = base_dir / "sample_text" / "sample_input_text_to_analyze_by_llm_v1.txt"
     return load_txt_file(text_path)
+
+
+def generate_prompt():
+    return get_base_prompt().replace("[SAMPLE INPUT TEXT]", get_text_to_analyze())
 
 
 def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
@@ -62,7 +66,7 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
 
 
 def sandbox():
-    print(get_prompt())
+    print(generate_prompt())
     return
 
 
