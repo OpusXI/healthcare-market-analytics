@@ -2,9 +2,9 @@ import json
 import os
 from pathlib import Path
 
-import openai
 import tiktoken
 from dotenv import load_dotenv
+from openai import OpenAI
 
 
 def get_API_key():
@@ -18,7 +18,9 @@ def get_API_key():
     return key
 
 
-openai.api_key = get_API_key()
+def initialize_openai_client():
+    client = OpenAI(api_key=get_API_key())
+    return client
 
 
 def load_txt_file(file_path):
@@ -76,7 +78,7 @@ def create_messages(user_prompt: str, system_prompt: str) -> list:
     ]
 
 
-def get_token_encoder(model: str = "gpt-4o-mini"):
+def get_token_encoder(model: str = "gpt-4o-mini-2024-07-18"):
     """
     Returns the token encoder for a given model.
     """
@@ -87,7 +89,7 @@ def get_token_encoder(model: str = "gpt-4o-mini"):
         return tiktoken.get_encoding("cl100k_base")  # Fallback for unknown models
 
 
-def count_tokens(text: str, model: str = "gpt-4o-mini") -> int:
+def count_tokens(text: str, model: str = "gpt-4o-mini-2024-07-18") -> int:
     """
     Counts the number of tokens in a string for the specified model.
     """
@@ -95,7 +97,7 @@ def count_tokens(text: str, model: str = "gpt-4o-mini") -> int:
     return len(encoder.encode(text))
 
 
-def count_messages_tokens(messages: list, model: str = "gpt-4o-mini") -> int:
+def count_messages_tokens(messages: list, model: str = "gpt-4o-mini-2024-07-18") -> int:
     """
     Counts tokens in a list of messages for OpenAI ChatCompletion.
     Pass a tiktoken encoder and the message list.
@@ -134,8 +136,8 @@ def send_messages_to_llm(messages, config=None):
     Args:
         messages (list): List of messages to send to the LLM.
         config (dict): Configuration parameters for the API call.
-            - model (str): Model name (default: "gpt-4o-mini").
-            - temperature (float): Sampling temperature (default: 0.7).
+            - model (str): Model name (default: "gpt-4o-mini-2024-07-18").
+            - temperature (float): Sampling temperature (default: 0).
             - max_tokens (int): Maximum tokens in the response (default: 1000).
     Returns:
         str: The generated response from the LLM.
@@ -144,18 +146,20 @@ def send_messages_to_llm(messages, config=None):
         config = load_llm_config()
 
     try:
-        response = openai.ChatCompletion.create(
-            model=config.get("model", "gpt-4o-mini"),
+
+        client = initialize_openai_client()
+        completion = client.chat.completions.create(
+            model=config.get("model", "gpt-4o-mini-2024-07-18"),
             messages=messages,
             temperature=config.get("temperature", 0),
-            max_tokens=config.get("max_tokens", 1000),
+            max_completion_tokens=config.get("max_completion_tokens", 1000),
         )
 
-        finish_reason = response["choices"][0]["finish_reason"]
+        finish_reason = completion.choices[0].finish_reason
         if finish_reason == "length":
             print("Warning: output may have been cut off due to token limit.")
 
-        return response["choices"][0]["message"]["content"]
+        return completion.choices[0].message.content
 
     except Exception as e:
         return f"Error: {e}"
