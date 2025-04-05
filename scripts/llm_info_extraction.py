@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import openai
@@ -102,25 +103,40 @@ def count_messages_tokens(messages: list, model: str = "gpt-4o-mini") -> int:
     return total_tokens
 
 
-def send_messages_to_llm(messages, model="gpt-4o-mini", temperature=0, max_tokens=1000):
+def load_llm_config():
+    """
+    Loads the LLM configuration from a JSON file.
+    Returns:
+        dict: Configuration parameters for the API call.
+    """
+    base_dir = Path(__file__).parent.resolve().parents[0]
+    config_path = base_dir / "config" / "openai_config.json"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def send_messages_to_llm(messages, config=None):
     """
     Sends a prompt to the LLM and returns the response.
 
     Args:
         messages (list): List of messages to send to the LLM.
-        model (str): The model to use (e.g., 'gpt-4', 'gpt-3.5-turbo').
-        temperature (float): Sampling temperature.
-        max_tokens (int): Max number of tokens in the response.
-
+        config (dict): Configuration parameters for the API call.
+            - model (str): Model name (default: "gpt-4o-mini").
+            - temperature (float): Sampling temperature (default: 0.7).
+            - max_tokens (int): Maximum tokens in the response (default: 1000).
     Returns:
         str: The generated response from the LLM.
     """
+    if config is None:
+        config = load_llm_config()
+
     try:
         response = openai.ChatCompletion.create(
-            model=model,
+            model=config.get("model", "gpt-4o-mini"),
             messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
+            temperature=config.get("temperature", 0),
+            max_tokens=config.get("max_tokens", 1000),
         )
 
         finish_reason = response["choices"][0]["finish_reason"]
@@ -138,7 +154,13 @@ def sandbox():
     user_prompt = generate_user_prompt()
     system_prompt = get_system_prompt()
     messages = create_messages(user_prompt, system_prompt)
-    print(count_messages_tokens(messages))
+
+    config = load_llm_config()
+
+    response = send_messages_to_llm(messages, config)
+    print("LLM Response:")
+    print(response)
+
     return
 
 
