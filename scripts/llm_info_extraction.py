@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import openai
+import tiktoken
 
 
 def get_API_key():
@@ -37,6 +38,44 @@ def generate_prompt():
     return get_base_prompt().replace("[SAMPLE INPUT TEXT]", get_text_to_analyze())
 
 
+def create_message(role: str, content: str) -> dict:
+    """
+    Creates a single message block for OpenAI ChatCompletion.
+    Roles: 'system', 'user', or 'assistant'
+    """
+    return {"role": role, "content": content}
+
+
+def create_messages(user_prompt: str, system_prompt: str) -> list:
+    """
+    Builds a list of messages to send to OpenAI API.
+    Includes a system prompt (optional) and user prompt.
+    """
+    return [
+        create_message("system", system_prompt),
+        create_message("user", user_prompt),
+    ]
+
+
+def get_token_encoder(model: str = "gpt-4o-mini"):
+    """
+    Returns the token encoder for a given model.
+    """
+    try:
+        return tiktoken.encoding_for_model(model)
+    except KeyError:
+        print(f"Unknown model '{model}', using default encoding.")
+        return tiktoken.get_encoding("cl100k_base")  # Fallback for unknown models
+
+
+def count_tokens(text: str, model: str = "gpt-4o-mini") -> int:
+    """
+    Counts the number of tokens in a string for the specified model.
+    """
+    encoder = get_token_encoder(model)
+    return len(encoder.encode(text))
+
+
 def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
     """
     Sends a prompt to the LLM and returns the response.
@@ -66,7 +105,7 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
 
 
 def sandbox():
-    print(generate_prompt())
+    print(count_tokens(generate_prompt(), "gpt-4o-mini"))
     return
 
 
