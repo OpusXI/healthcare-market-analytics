@@ -12,6 +12,31 @@ editing remains mixed, and some advocacy groups are calling for more transparenc
 in clinical trial data. In Europe, differences in regulatory approval timelines are
 slowing market access in certain countries."""
 
+sample_output = [
+    {
+        "barrier_type": "cost",
+        "affected_party": "payer",
+        "description": "The cost of treatment can exceed $2 million, presenting a "
+        "significant challenge for both private insurers and national healthcare "
+        "systems.",
+    },
+    {
+        "barrier_type": "infrastructure",
+        "affected_party": "provider",
+        "description": "Rural hospitals often still lack proper refrigeration "
+        "equipment.",
+    },
+    {
+        "barrier_type": "regulatory",
+        "affected_party": "policymaker",
+        "description": "Differences in regulatory approval timelines are slowing "
+        "market access in certain countries.",
+    },
+]
+
+"""NOISE: Rare Disease Congress in Berlin, viral vector design, public perception
+transparency in trial data, 50 new therapies"""
+
 
 def get_API_key():
     pass
@@ -19,20 +44,21 @@ def get_API_key():
 
 def get_prompt():
     example_prompt = (
-        "I am building an ontology to capture access barriers to gene therapy.\n\n"
-        "Can you list the main categories of barriers (e.g., pricing, regulatory, "
-        "clinical, ethical), then under each category list the most common or "
-        "important subtypes (e.g., for pricing: cost-effectiveness thresholds, payer "
-        "reimbursement rules), and for each subtype provide a definition that would "
-        "make sense in an ontology?\n\n"
-        "Please format the result as:\n"
-        "Category:\n"
-        "- Subtype: Definition"
+        "I am building a custom ontology to classify access barriers to gene "
+        "therapy.\n\nBelow is some unstructured text. Please read it carefully and "
+        "extract the major access barriers.\n\nFor each barrier you identify, output a "
+        "JSON object with the following keys:\n - barrier_type: the general type of "
+        "access issue (e.g., cost, regulatory, infrastructure)\n- affected_party: "
+        "who is impacted the most by this barrier (e.g., patient, provider, payer, "
+        "policymaker)\n- description: a short summary of the issue in natural "
+        "language\n\nPlease return the result as a Python list of dictionaries. \n\n"
+        "Now analyze the following text and extract the relevant access barriers:\n"
     )
+
     return example_prompt
 
 
-def send_prompt_to_llm(prompt, model="gpt-4", temperature=0.3, max_tokens=1000):
+def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
     """
     Sends a prompt to the LLM and returns the response.
 
