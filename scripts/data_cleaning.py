@@ -21,7 +21,9 @@ def extract_text_from_single_pdf(pdf_folder_path, filename):
     pdf_path = os.path.join(pdf_folder_path, filename)
     with pdfplumber.open(pdf_path) as pdf:
         text = "\n".join(
-            page.extract_text() for page in pdf.pages if page.extract_text()
+            page.extract_text(x_tolerance=1, y_tolerance=1)
+            for page in pdf.pages
+            if page.extract_text()
         )
 
     return text
