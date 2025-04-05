@@ -16,9 +16,9 @@ def get_system_prompt(system_prompt_file_name):
     return load_txt_file(prompt_path)
 
 
-def get_base_prompt(base_llm_prompt_file_name):
+def get_base_prompt(base_prompt_file_name):
     base_dir = get_base_dir()
-    prompt_path = base_dir / "prompts" / base_llm_prompt_file_name
+    prompt_path = base_dir / "prompts" / base_prompt_file_name
     return load_txt_file(prompt_path)
 
 
@@ -28,5 +28,7 @@ def get_text_to_analyze(text_file_name):
     return load_txt_file(text_path)
 
 
-def generate_user_prompt():
-    return get_base_prompt().replace("[INSERT CHUNK]", get_text_to_analyze())
+def generate_user_prompt(base_prompt_file_name, text_file_name):
+    return get_base_prompt(base_prompt_file_name).replace(
+        "[INSERT CHUNK]", get_text_to_analyze(text_file_name)
+    )
