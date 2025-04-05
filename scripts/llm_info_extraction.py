@@ -82,7 +82,27 @@ def count_tokens(text: str, model: str = "gpt-4o-mini") -> int:
     return len(encoder.encode(text))
 
 
-def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
+def count_messages_tokens(messages: list, model: str = "gpt-4o-mini") -> int:
+    """
+    Counts tokens in a list of messages for OpenAI ChatCompletion.
+    Pass a tiktoken encoder and the message list.
+    """
+    # Token rules differ slightly between models
+    if "gpt-3.5" in model:
+        tokens_per_message = 4
+    else:  # gpt-4, gpt-4o, etc.
+        tokens_per_message = 3
+
+    total_tokens = 0
+    for message in messages:
+        total_tokens += tokens_per_message
+        for key, value in message.items():
+            total_tokens += count_tokens(value, model=model)
+    total_tokens += 3  # Priming tokens for reply
+    return total_tokens
+
+
+def send_message_to_llm(messages, model="gpt-4o-mini", temperature=0, max_tokens=1000):
     """
     Sends a prompt to the LLM and returns the response.
 
@@ -98,10 +118,7 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
     try:
         response = openai.ChatCompletion.create(
             model=model,
-            messages=[
-                {"role": "system", "content": "You are a biomedical ontology expert."},
-                {"role": "user", "content": prompt},
-            ],
+            messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
         )
@@ -111,7 +128,11 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
 
 
 def sandbox():
-    print(create_messages(generate_user_prompt(), get_system_prompt()))
+
+    user_prompt = generate_user_prompt()
+    system_prompt = get_system_prompt()
+    messages = create_messages(user_prompt, system_prompt)
+    print(count_messages_tokens(messages))
     return
 
 
