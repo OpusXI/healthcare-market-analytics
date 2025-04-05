@@ -34,7 +34,13 @@ def get_text_to_analyze():
     return load_txt_file(text_path)
 
 
-def generate_prompt():
+def get_system_prompt():
+    base_dir = Path(__file__).parent.resolve().parents[0]
+    prompt_path = base_dir / "prompts" / "system_prompt_v1.txt"
+    return load_txt_file(prompt_path)
+
+
+def generate_user_prompt():
     return get_base_prompt().replace("[SAMPLE INPUT TEXT]", get_text_to_analyze())
 
 
@@ -105,7 +111,7 @@ def send_prompt_to_llm(prompt, model="gpt-4", temperature=0, max_tokens=1000):
 
 
 def sandbox():
-    print(count_tokens(generate_prompt(), "gpt-4o-mini"))
+    print(create_messages(generate_user_prompt(), get_system_prompt()))
     return
 
 
