@@ -1,12 +1,24 @@
 import json
+import os
 from pathlib import Path
 
 import openai
 import tiktoken
+from dotenv import load_dotenv
 
 
 def get_API_key():
-    pass
+
+    load_dotenv()
+    key = os.getenv("OPENAI_API_KEY")
+    if key is None:
+        raise ValueError(
+            "API key not found. Please set the " "OPENAI_API_KEY environment variable."
+        )
+    return key
+
+
+openai.api_key = get_API_key()
 
 
 def load_txt_file(file_path):
@@ -154,9 +166,7 @@ def sandbox():
     user_prompt = generate_user_prompt()
     system_prompt = get_system_prompt()
     messages = create_messages(user_prompt, system_prompt)
-
     config = load_llm_config()
-
     response = send_messages_to_llm(messages, config)
     print("LLM Response:")
     print(response)
