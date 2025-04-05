@@ -1,0 +1,18 @@
+From the following domain text about gene therapy, extract meaningful relationships in the form of (subject, predicate, object) triples.
+
+Focus on relationships related to market access, such as:
+- Drug approvals
+- Reimbursement decisions
+- Pricing barriers
+- Stakeholder interactions
+
+Format the output as:
+[
+  {"subject": "", "predicate": "", "object": ""},
+  ...
+]
+
+Text:
+"""
+[INSERT CHUNK]
+"""
