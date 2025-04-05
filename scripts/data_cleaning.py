@@ -1,5 +1,7 @@
 import os
+import re
 import textwrap
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -55,6 +57,17 @@ def extract_text_from_pdfs(pdf_folder_path, max_workers=4):
     return all_docs
 
 
+def clean_text(text):
+    text = unicodedata.normalize("NFKC", text)  # Normalize Unicode characters
+    text = text.lower()  # Convert to lowercase
+    text = re.sub(r"Page \d+ of \d+", "", text)  # Remove page numbers
+    text = re.sub(r"[^\x00-\x7F]+", " ", text)  # Remove non-ASCII characters
+    text = re.sub(r"\s+", " ", text)  # Remove extra whitespace
+    text = re.sub(r"\n+", "\n", text)  # Remove extra newlines
+
+    return text
+
+
 def chunk_text(text, chunk_size):
     return textwrap.wrap(text, chunk_size)
 
@@ -62,8 +75,8 @@ def chunk_text(text, chunk_size):
 def chunk_texts(all_docs, chunk_size=300):
     chunked_docs = {}
     for filename, text in all_docs.items():
-        # cleaned_text = clean_text(text)
-        chunked_docs[filename] = chunk_text(text, chunk_size)
+        cleaned_text = clean_text(text)
+        chunked_docs[filename] = chunk_text(cleaned_text, chunk_size)
     return chunked_docs
 
 
@@ -71,6 +84,12 @@ def sandbox():
     pdf_folder_path = get_raw_data_path()
     all_docs = extract_text_from_pdfs(pdf_folder_path)
     chunked_docs = chunk_texts(all_docs, chunk_size=300)
+
+    for filename, chunks in chunked_docs.items():
+        print(f"Chunks for {filename}:")
+        for i, chunk in enumerate(chunks):
+            print(f"Chunk {i + 1}: {chunk}")
+        print("\n")
 
     return chunked_docs
 
