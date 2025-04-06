@@ -6,7 +6,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import syntok.segmenter as segmenter
 from tqdm import tqdm
 
-import utils.llm_info_extraction as llm_info_extractor
+from utils.api_message_struc_utils import count_tokens
 
 
 def clean_text(text):
@@ -78,14 +78,14 @@ def split_document_to_chunks(
 
     sentences = split_text_into_sentences(text)
     paragraphs = merge_sentences_to_paragraphs(
-        sentences, max_tokens=max_tokens, token_count_fn=llm_info_extractor.count_tokens
+        sentences, max_tokens=max_tokens, token_count_fn=count_tokens
     )
     chunks = rolling_paragraph_chunks(
         paragraphs,
         source_file=source_file,
         window=window,
         stride=stride,
-        token_count_fn=llm_info_extractor.count_tokens,
+        token_count_fn=count_tokens,
     )
 
     return chunks
