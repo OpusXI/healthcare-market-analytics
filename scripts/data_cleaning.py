@@ -5,7 +5,7 @@ import utils.pdf_extractor_utils as pdf_extractor
 def main():
     texts_dict = pdf_extractor.extract_text_from_pdfs(pdf_extractor.get_raw_data_path())
     chunks_dict = data_cleaner.split_all_documents_to_chunks(texts_dict)
-    return chunks_dict
+    return chunks_dict  # Returns a dict where values are list of dicts with chunk data
 
 
 if __name__ == "__main__":
