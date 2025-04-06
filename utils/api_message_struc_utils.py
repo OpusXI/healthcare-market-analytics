@@ -57,11 +57,3 @@ def count_messages_tokens(messages: list, model: str = "gpt-4o-mini-2024-07-18")
             total_tokens += count_tokens(value, model=model)
     total_tokens += 3  # Priming tokens for reply
     return total_tokens
-
-
-def sandbox():
-    return
-
-
-if __name__ == "__main__":
-    sandbox()
