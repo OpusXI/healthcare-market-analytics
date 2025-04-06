@@ -30,24 +30,29 @@ def prepare_response(df):
     return df
 
 
-def load_df_to_db(df):
+def load_df_to_db(df, table):
     conn = get_db_connection()
-    df.to_sql("llm_prompts_and_responses", conn, if_exists="append", index=False)
+    df.to_sql(table, conn, if_exists="append", index=False)
     conn.commit()
     conn.close()
 
 
-def main():
-
+def prepare_entity_concepts_prompt(df):
+    table = "entity_concepts_prompts_and_responses"
     system_prompt_file_name = "system_prompt_v1.txt"
     user_prompt_file_name = "entity_concepts_extraction_prompt_v1_ZS_no_examples.txt"
 
-    df = load_db_to_df()
     df = prepare_system_prompt(df, system_prompt_file_name)
     df = prepare_user_prompt(df, user_prompt_file_name)
     df = preapare_messages(df)
     df = prepare_response(df)
-    df = load_df_to_db(df)
+    load_df_to_db(df, table)
+
+
+def main():
+
+    df = load_db_to_df()
+    prepare_entity_concepts_prompt(df)
 
 
 if __name__ == "__main__":

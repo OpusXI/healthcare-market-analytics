@@ -17,11 +17,11 @@ def create_chunks_table(conn):
     conn.commit()
 
 
-def create_llm_prompts_and_responses_table(conn):
+def create_entity_concepts_prompts_and_responses_table(conn):
     cursor = conn.cursor()
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS llm_prompts_and_responses (
+        CREATE TABLE IF NOT EXISTS entity_concepts_prompts_and_responses (
             id INTEGER PRIMARY KEY,
             source_file TEXT NOT NULL,
             chunk_index INTEGER NOT NULL,
