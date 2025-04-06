@@ -1,8 +1,6 @@
-import sqlite3
+from db.connection import get_connection
+from db.schema import create_barriers_table
 
-from db.connection import get_sql_db_path
-
-# Sample data from your JSON
 barriers_data = [
     {
         "barrier_type": "cost",
@@ -17,30 +15,6 @@ barriers_data = [
         " and administer gene therapies.",
     },
 ]
-
-
-def init_sql_db():
-
-    sql_db_path = get_sql_db_path()
-    conn = sqlite3.connect(sql_db_path)
-    return conn
-
-
-def create_barriers_table(conn):
-    cursor = conn.cursor()
-    # Create table
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS barriers (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            barrier_type TEXT NOT NULL,
-            affected_party TEXT NOT NULL,
-            description TEXT NOT NULL,
-            doc_id TEXT
-        )
-    """
-    )
-    conn.commit()
 
 
 def insert_barriers_data(conn, barriers, doc_id=None):
@@ -93,7 +67,7 @@ def query_data(conn, query, params=(), fetch_one=False):
 
 
 if __name__ == "__main__":
-    conn = init_sql_db()
+    conn = get_connection()
     create_barriers_table(conn)
     insert_barriers_data(conn, barriers_data, doc_id="doc_001")
     conn.close()
