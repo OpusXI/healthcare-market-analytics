@@ -1,8 +1,6 @@
-import os
 import sqlite3
-from pathlib import Path
 
-from dotenv import load_dotenv
+from db.connection import get_sql_db_path
 
 # Sample data from your JSON
 barriers_data = [
@@ -19,14 +17,6 @@ barriers_data = [
         " and administer gene therapies.",
     },
 ]
-
-
-def get_sql_db_path():
-    env_path = Path(__file__).resolve().parents[1] / ".env"
-    load_dotenv(env_path)
-    sql_db_path = os.getenv("SQL_DB_PATH")
-
-    return sql_db_path
 
 
 def init_sql_db():
@@ -90,11 +80,6 @@ def delete_barrier_by_id(conn, barrier_id):
     cursor = conn.cursor()
     cursor.execute("DELETE FROM barriers WHERE id = ?", (barrier_id,))
     conn.commit()
-
-
-def get_connection():
-    sql_db_path = get_sql_db_path()
-    return sqlite3.connect(sql_db_path)
 
 
 def query_data(conn, query, params=(), fetch_one=False):
