@@ -17,15 +17,23 @@ def create_chunks_table(conn):
     conn.commit()
 
 
-def create_chunk_outputs_table(conn):
+def create_llm_prompts_and_responses_table(conn):
     cursor = conn.cursor()
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS chunk_outputs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            chunk_id INTEGER NOT NULL,
-            llm_output TEXT,
-            FOREIGN KEY (chunk_id) REFERENCES chunks(id)
+        CREATE TABLE IF NOT EXISTS llm_prompts_and_responses (
+            id INTEGER PRIMARY KEY,
+            source_file TEXT NOT NULL,
+            chunk_index INTEGER NOT NULL,
+            text TEXT NOT NULL,
+            token_count INTEGER NOT NULL,
+            system_prompt_ver TEXT,
+            system_prompt TEXT,
+            user_prompt_ver TEXT,
+            user_prompt TEXT,
+            message TEXT,           -- JSON string (list of message dicts)
+            response TEXT,           -- Raw model response (optional at start)
+            status TEXT DEFAULT 'staged'
         )
     """
     )
