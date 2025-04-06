@@ -1,7 +1,8 @@
 from utils.db.connection import get_db_connection
 from utils.db.schema import (
     create_chunks_table,
-    create_entity_concepts_extraction_prompts_and_responses_table,
+    create_entity_concepts_prompts_and_responses_table,
+    create_relationships_prompts_and_responses_table,
 )
 
 
@@ -18,7 +19,8 @@ def apply_indexes_and_optimizations(conn):
 def main():
     conn = get_db_connection()
     create_chunks_table(conn)
-    create_entity_concepts_extraction_prompts_and_responses_table(conn)
+    create_entity_concepts_prompts_and_responses_table(conn)
+    create_relationships_prompts_and_responses_table(conn)
     apply_indexes_and_optimizations(conn)
     conn.close()
 

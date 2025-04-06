@@ -40,6 +40,29 @@ def create_entity_concepts_prompts_and_responses_table(conn):
     conn.commit()
 
 
+def create_relationships_prompts_and_responses_table(conn):
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS relationships_prompts_and_responses (
+            id INTEGER PRIMARY KEY,
+            source_file TEXT NOT NULL,
+            chunk_index INTEGER NOT NULL,
+            text TEXT NOT NULL,
+            token_count INTEGER NOT NULL,
+            system_prompt_ver TEXT,
+            system_prompt TEXT,
+            user_prompt_ver TEXT,
+            user_prompt TEXT,
+            message TEXT,           -- JSON string (list of message dicts)
+            response TEXT,           -- Raw model response (optional at start)
+            status TEXT DEFAULT 'staged'
+        )
+    """
+    )
+    conn.commit()
+
+
 def create_barriers_table(conn):
     cursor = conn.cursor()
     # Create table

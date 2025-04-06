@@ -11,7 +11,7 @@ from utils.prompt_engineer_utils import (
 
 def load_db_to_df():
     conn = get_db_connection()
-    to_process = get_unprocessed_chunks(conn, limit=None)
+    to_process = get_unprocessed_chunks(conn, limit=25)
 
     cursor = conn.cursor()
     cursor.execute("PRAGMA table_info(chunks)")
@@ -49,10 +49,25 @@ def prepare_entity_concepts_prompt(df):
     load_df_to_db(df, table)
 
 
+def prepare_relationships_prompt(df):
+    table = "relationships_prompts_and_responses"
+    system_prompt_file_name = "system_prompt_v1.txt"
+    user_prompt_file_name = (
+        "relationship_triple_extraction_prompt_v1_ZS_no_examples.txt"
+    )
+
+    df = prepare_system_prompt(df, system_prompt_file_name)
+    df = prepare_user_prompt(df, user_prompt_file_name)
+    df = preapare_messages(df)
+    df = prepare_response(df)
+    load_df_to_db(df, table)
+
+
 def main():
 
     df = load_db_to_df()
     prepare_entity_concepts_prompt(df)
+    prepare_relationships_prompt(df)
 
 
 if __name__ == "__main__":
