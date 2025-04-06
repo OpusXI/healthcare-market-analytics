@@ -33,9 +33,7 @@ def check_spacing_in_extracted_text(filename, text):
     return text
 
 
-def extract_text_from_single_pdf(
-    pdf_path,
-):
+def extract_text_from_single_pdf(pdf_path):
     filename = os.path.basename(pdf_path)
     # print(f"Starting {filename} on PID {os.getpid()}")
     try:
