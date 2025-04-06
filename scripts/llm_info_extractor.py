@@ -8,8 +8,7 @@ def main():
         "sample_input_text_to_analyze_by_llm_v1.txt",
     )
 
-    print(f"System Prompt: {sys_prompt}")
-    print(f"User Prompt: {user_prompt}")
+    return sys_prompt, user_prompt
 
 
 if __name__ == "__main__":
