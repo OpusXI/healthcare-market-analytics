@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 
 
 def get_sql_db_path():
-    env_path = Path(__file__).resolve().parents[1] / ".env"
+    env_path = Path(__file__).resolve().parents[2] / ".env"
     load_dotenv(env_path)
-    return os.getenv("SQL_DB_PATH")
+    return Path(os.getenv("SQL_DB_PATH")).resolve()
 
 
 def get_db_connection():

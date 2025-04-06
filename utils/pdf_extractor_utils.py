@@ -10,7 +10,7 @@ from tqdm import tqdm
 def get_raw_data_path():
     env_path = Path(__file__).resolve().parents[1] / ".env"
     load_dotenv(env_path)
-    pdf_folder_path = os.getenv("RAW_DATA_PATH")
+    pdf_folder_path = Path(os.getenv("RAW_DATA_PATH")).resolve()
 
     return pdf_folder_path
 
