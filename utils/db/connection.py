@@ -11,5 +11,5 @@ def get_sql_db_path():
     return os.getenv("SQL_DB_PATH")
 
 
-def get_connection():
+def get_db_connection():
     return sqlite3.connect(get_sql_db_path())

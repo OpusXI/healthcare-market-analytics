@@ -1,6 +1,5 @@
-from uitls.db.schema import create_chunks_table
-
-from utils.db.connection import get_connection
+from utils.db.connection import get_db_connection
+from utils.db.schema import create_chunks_table
 
 
 def apply_indexes_and_optimizations(conn):
@@ -13,8 +12,12 @@ def apply_indexes_and_optimizations(conn):
     conn.commit()
 
 
-if __name__ == "__main__":
-    conn = get_connection()
+def main():
+    conn = get_db_connection()
     create_chunks_table(conn)
     apply_indexes_and_optimizations(conn)
     conn.close()
+
+
+if __name__ == "__main__":
+    main()
