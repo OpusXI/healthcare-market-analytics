@@ -12,7 +12,7 @@ ontology of access barriers. This enables analytics teams and market access stra
 to quickly identify trends and recurring issues that impact pricing, reimbursement,
 and approval outcomes across different regions.
 
-# Project Highlights
+## Project Highlights
 
 - Real-world unstructured data
 - ETL Pipeline
@@ -20,7 +20,7 @@ and approval outcomes across different regions.
 - Hybrid data architecture (SQL + graph model)
 - Custom ontology creation + iterative refinement
 
-# Technologies & Concepts
+## Technologies & Concepts
 
 - Data Engineering – ETL workflows, structured output in SQL format, graph-based 
 knowledge modeling
