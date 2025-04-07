@@ -1,5 +1,6 @@
 {
   "model": "gpt-4o-mini-2024-07-18",
+  "store": true,
   "temperature": 0,
   "max_completion_tokens": 1000
 }
