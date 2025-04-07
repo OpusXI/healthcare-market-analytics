@@ -42,6 +42,7 @@ def send_messages_to_llm(messages, config=None):
         completion = client.chat.completions.create(
             model=config.get("model", "gpt-4o-mini-2024-07-18"),
             messages=messages,
+            store=config.get("store", False),
             temperature=config.get("temperature", 0),
             max_completion_tokens=config.get("max_completion_tokens", 1000),
         )
@@ -50,7 +51,7 @@ def send_messages_to_llm(messages, config=None):
         if finish_reason == "length":
             print("Warning: output may have been cut off due to token limit.")
 
-        return completion.choices[0].message.content
+        return completion
 
     except Exception as e:
         return f"Error: {e}"
