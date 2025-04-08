@@ -1,0 +1,17 @@
+You are building the class structure of an ontology for Gene Therapy.
+
+Given the following terms, identify which ones represent classes — concepts that refer to categories or groupings of things (nouns that can have instances). Then, organize them into a class hierarchy, identifying subclasses where applicable. I have attached the original text for more context if needed.
+
+Rules:
+
+    If something can have multiple examples, it's likely a class.
+
+    Use “is a kind of” logic to check subclass relationships (e.g., “Oncology Drug is a kind of Drug”).
+
+Output the hierarchy in JSON.
+
+TERMS EXTRACTED: 
+[TERMS EXTRACTED]
+
+ORIGINAL TEXT:
+[SAMPLE TEXT]

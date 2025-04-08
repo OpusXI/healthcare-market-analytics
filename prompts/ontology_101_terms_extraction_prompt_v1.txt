@@ -1,0 +1,14 @@
+You are creating an ontology for the domain of gene therapy.
+
+From the following text, extract all key terms that describe:
+
+    1) Concrete or abstract objects in the domain (typically nouns or pronouns)
+
+    2) Properties or characteristics of those objects (typically adjectives or descriptive noun phrases)
+
+    3) Relationships between objects (typically verbs or verb phrases)
+
+Return the result as a categorized JSON list
+
+TEXT:
+[SAMPLE TEXT]

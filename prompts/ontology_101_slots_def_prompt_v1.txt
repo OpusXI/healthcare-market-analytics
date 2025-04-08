@@ -1,0 +1,24 @@
+You are designing properties (slots) for classes in an ontology about Gene Therapy.
+
+From the following list of terms and classes, identify:
+
+    Intrinsic attributes (e.g., "approval date", "cost", "severity") — usually adjectives or descriptive nouns
+
+    Extrinsic relationships between classes (e.g., “approved by”, “covered by”, “submitted to”) — usually verbs
+
+For each property, specify:
+
+    Domain (which class it belongs to)
+
+    Value type (string, number, date, boolean, or an instance of another class)
+
+I have also attached the original text for context.
+
+TERMS EXTRACTED:
+[TERMS EXTRACTED]
+
+CLASS DEFINED:
+[CLASS DEFINED]
+
+ORGINAL TEXT:
+[SAMPLE TEXT]

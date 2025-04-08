@@ -1,0 +1,23 @@
+Analyze the following text and perform the following steps in order to construct a custom ontology for the domain of gene therapy. Follow a structured reasoning process and explain each step clearly:
+
+1) Key Term Extraction:
+    - Identify and extract key domain-specific terms, especially focusing on nouns, proper nouns, verbs, pronouns, and adjectives.
+    - Return a list of extracted terms, categorized by part of speech.
+
+2) Ontology Class Discovery:
+    - From the nouns and proper nouns, identify potential ontology classes. These represent key concepts in gene therapy (e.g., Vector, Gene, Patient, Treatment).
+    - Group these classes into a hierarchical structure (superclass → subclass) based on generality. For example:
+        {Entity: [{BiologicalEntity: [Gene, Protein], {Therapy: [GeneTherapy, Immunotherapy]}}]}
+
+3) Slot / Property Definition
+
+    - Use the verbs and adjectives to define slots or properties for each class. These describe what the class does or how it is described. For example:
+        {Class: Vector, Properties: [deliversGene, isViral, hasEfficiency]}
+
+4) Relationship Modeling
+    - Model relationships between classes by linking slot values to instances or other classes. For example: GeneTherapy has a property usesVector whose value is an instance of Vector class.
+    - Express relationships as slot-based links, emphasizing that slot values are often instances of other classes.
+
+5) Return Structured Ontology
+    - Output the ontology in a structured format (e.g., JSON-LD-like structure or RDF-style triples if needed).
+    - Ensure it includes: Class definitions and hierarchies, Properties (slots) and their domains/ranges, Inter-class relationships
